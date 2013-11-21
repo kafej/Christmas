@@ -33,5 +33,37 @@
 			mess.degrees(t);
 			$(this).draggable();
 		});
+   };
+   $.fn.mess2 = function() {
+		var li = $('#ready').find('li');
+		var mess2 = {
+			random: function(low, up){
+				return Math.floor((Math.random()*(low-up+1))+up);
+			},
+			css: function(){
+				var rotate = this.random(40, -40),
+					zindex = this.random(0, li.length),
+					degrees = 'rotate('+rotate+'deg)';
+				return {'degrees': degrees, 'zindex': zindex }
+			},
+			degrees: function(element){
+				var random = this.css();
+				$(element).css({
+					'-webkit-transform': random.degrees,
+					'-moz-transform': random.degrees,
+					'-o-transform': random.degrees,
+					'z-index': random.zindex
+				});
+			},
+			animate: function(element, x, y){
+				$(element).animate({
+					top: y,
+					left: x
+				}, 400);
+			}
+		}
+		li.each(function(){
+			mess2.degrees($(this));
+		});
    }; 
 })( jQuery );

@@ -12,26 +12,48 @@
 	<script src="js/jquery.js" type="text/javascript"></script>
 	<script src="js/jquery-ui.js" type="text/javascript"></script>
 	<script src="js/mess.js" type="text/javascript"></script>
+	<script src="js/html2canvas.min.js" type="text/javascript"></script>
+	<script src="js/colorpicker.js" type="text/javascript"></script>
+	<script src="js/eye.js" type="text/javascript"></script>
+	<script src="js/layout.js" type="text/javascript"></script>
+	<script src="js/utils.js" type="text/javascript"></script>
 	<script>
 	$(document).ready(function() {
+		$('#creatimg').click(function(e) {
+			var element = document.getElementById('wallpaper');
+			var addreadycard = document.getElementById('readyimage');
+			$('#creatimg').html('Create another one !');
+			    html2canvas(element, {
+				    onrendered: function(canvas) {
+				    	addreadycard.appendChild(canvas);
+			    	}
+			    });
+			    $('#readyimage').append('<div class="thisis">This is your ready to save Image !!!</div>');
+        });
 		// Main adding wallpaper function
 		$.fn.addwallpaper = function () {
-   			var wall = 1 + Math.floor(Math.random() * 5);
-			$('#wallpaper').append('<img src="img/'+wall+'.jpg" class="check" alt="" height="768" width="1024">');
+   			var wall = 1 + Math.floor(Math.random() * 43);
+
+   			var height = $('#sizeh').val();
+   			var width = $('#sizew').val();
+			$('#wallpaper').append('<img src="img/wallpapers/'+wall+'.jpg" class="check" alt="" height="'+height+'" width="'+width+'" style="display:block; margin-top: -60px; padding: 0px;">');
+			$('#wallpaper, .check').css({
+				width: width,
+				height: height
+			});
 		};
 
-		$('#anothere').click(function(e){
+		$('#another').click(function(e){
 		    $('#wallpaper img').remove();
-		    $('#anothere').html('Change Chrismtas Wallpaper');
+		    $('#another').html('Change Chrismtas Wallpaper');
 		    $(this).addwallpaper();
-		    
 		});
 		$('#cleartext').click(function(e){
 		    $('#ready li').remove();
 		});
 
 		$('#randomtext').click(function(e){
-		    $(this).mess();
+		    $(this).mess2();
 		});
 
 		$('#button').one('click', function() {
@@ -42,11 +64,29 @@
 			 $('#button').val('Add and rotate');
 		});
 
+		$('#color').click(function(e) {
+			$('#color').ColorPicker({
+				onSubmit: function(hsb, hex, rgb, el) {
+					$(el).val(hex);
+					$(el).ColorPickerHide();
+				},
+				onBeforeShow: function () {
+					$(this).ColorPickerSetColor(this.value);
+				}
+			})
+			.bind('keyup', function(){
+				$(this).ColorPickerSetColor(this.value);
+			});
+		});
+
 		// Christmass cards setting
 		$('#mainform').submit( function(e) {
 			e.preventDefault();
 			var text = $('#text').val();
-			$('#ready').append('<li>'+text+'</li>');
+			var fontSize = $('#fontsize').val();
+			var pickedcolor = $('#color').val();
+
+			$('#ready').append('<li style="font-size:'+fontSize+'px;color:#'+pickedcolor+';">'+text+'</li>');
 
 			// Function to random CSS style of text
 			$(this).mess();
@@ -56,24 +96,50 @@
 				$(this).addwallpaper();
 			};
 		});
+		// Christmass cards setting
+		$('#wallpapersize').submit( function(e) {
+			e.preventDefault();
+
+   			var height = $('#sizeh').val();
+   			var width = $('#sizew').val();
+			$('#wallpaper, .check').css({
+				width: width,
+				height: height
+			});
+		});
 	})
 	</script>
 </head>
 <body>
 	<form id="mainform">
 		<label>Your text here: </label>
-		<input type="text" id="text" class="text" size="60" value="Add text here" onblur="if(this.value == '') { this.value='Add text here'}" onfocus="if (this.value == 'Add text here') {this.value=''}" />
+		<input type="text" id="text" class="text" size="50" value="Add text here" onblur="if(this.value == '') { this.value='Add text here'}" onfocus="if (this.value == 'Add text here') {this.value=''}" />
 		<label>Choose Color: </label>
-		<input type="color" id="color" class="color" />
-		<input type="submit" id="button" name="settingsubmit" value="Show Christmass Card" />
+		<input type="color" id="color" class="color" size="6" />
+		<label>Font Size: </label>
+		<input type="text" id="fontsize" class="fontsize" size="2" />
+		<input type="submit" id="button" name="settingsubmit" value="Add text" />
 	</form>
-	<button id="anothere">Add Chrismtas Wallpaper</button>
+	<form id="wallpapersize">
+		<label>Wallpaper size (Example 1024x768): </label>
+		<input type="text" id="sizew" class="sizee" size="6" value="1024" onblur="if(this.value == '') { this.value='1024'}" onfocus="if (this.value == '1024') {this.value=''}" />
+		<label>x</label>
+		<input type="text" id="sizeh" class="sizee" size="6" value="768" onblur="if(this.value == '') { this.value='768'}" onfocus="if (this.value == '768') {this.value=''}" />
+		<input type="submit" id="buttonwall" name="settingsubmit" value="Change Size" />
+	</form>
+	<button id="another">Add Chrismtas Wallpaper</button>
 	<button id="cleartext">Clear text</button>
 	<button id="randomtext">Rotate text randomly again</button>
-	<div id="wallpaper">
-		<div id="ready">
+	<button id="creatimg" style="background-color: red;">Creat your chrismtas card</button>
+	<div class="box">
+		<div id="wallpaper">
+			<div id="ready">
+			</div>
 		</div>
 	</div>
+	<div class="box2">
+		<div id="readyimage">
+		</div>
 	</div>
 </body>
 </html>
