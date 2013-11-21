@@ -42,7 +42,6 @@
 				height: height
 			});
 		};
-
 		$('#another').click(function(e){
 		    $('#wallpaper img').remove();
 		    $('#another').html('Change Chrismtas Wallpaper');
@@ -55,7 +54,6 @@
 		$('#randomtext').click(function(e){
 		    $(this).mess2();
 		});
-
 		$('#button').one('click', function() {
 			// random wallpaper
 			if ( $('#wallpaper').hasClass('check') ) {
@@ -63,7 +61,6 @@
 			};
 			 $('#button').val('Add and rotate');
 		});
-
 		$('#color').click(function(e) {
 			$('#color').ColorPicker({
 				onSubmit: function(hsb, hex, rgb, el) {
@@ -78,8 +75,7 @@
 				$(this).ColorPickerSetColor(this.value);
 			});
 		});
-
-		// Christmass cards setting
+		// FORM - Christmass cards setting
 		$('#mainform').submit( function(e) {
 			e.preventDefault();
 			var text = $('#text').val();
@@ -96,7 +92,7 @@
 				$(this).addwallpaper();
 			};
 		});
-		// Christmass cards setting
+		// FORM - Wallpaper Size SetUp
 		$('#wallpapersize').submit( function(e) {
 			e.preventDefault();
 
